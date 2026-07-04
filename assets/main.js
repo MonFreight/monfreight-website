@@ -88,8 +88,9 @@
       ev.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
 
-      var ok = form.querySelector('.form-success');
-      var err = form.querySelector('.form-error');
+      var card = form.closest('.form-card') || document;
+      var ok = card.querySelector('.form-success');
+      var err = card.querySelector('.form-error');
       var btn = form.querySelector('button[type="submit"]');
       var btnText = btn ? btn.textContent : '';
       if (ok) ok.style.display = 'none';
