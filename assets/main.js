@@ -81,15 +81,45 @@
     stats.forEach(function (el) { so.observe(el); });
   }
 
-  // Contact form (front-end only demo handler)
+  // Contact form — sends enquiry via FormSubmit.co to info@monfreight.com.au
   var form = document.querySelector('#enquiry-form');
   if (form) {
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+
       var ok = form.querySelector('.form-success');
-      if (ok) ok.style.display = 'block';
-      form.reset();
-      if (ok) ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var err = form.querySelector('.form-error');
+      var btn = form.querySelector('button[type="submit"]');
+      var btnText = btn ? btn.textContent : '';
+      if (ok) ok.style.display = 'none';
+      if (err) err.style.display = 'none';
+      if (btn) { btn.disabled = true; btn.textContent = '...'; }
+
+      fetch('https://formsubmit.co/ajax/info@monfreight.com.au', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.value,
+          email: form.email.value,
+          phone: form.phone.value,
+          message: form.message.value,
+          _subject: 'Website enquiry — ' + form.name.value,
+          _template: 'table',
+          _captcha: 'false'
+        })
+      })
+      .then(function (res) { if (!res.ok) throw new Error('send failed'); return res.json(); })
+      .then(function () {
+        if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        form.reset();
+      })
+      .catch(function () {
+        if (err) { err.style.display = 'block'; err.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      })
+      .finally(function () {
+        if (btn) { btn.disabled = false; btn.textContent = btnText; }
+      });
     });
   }
 

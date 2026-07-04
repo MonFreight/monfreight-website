@@ -336,6 +336,8 @@ ul { list-style:none; }
 .form-note { font-size:.88rem; color:var(--muted); margin-top:6px; }
 .form-success { display:none; background:#e6f7ec; border:1px solid #b6e3c6; color:#1f6b3a;
   padding:14px 18px; border-radius:12px; margin-bottom:18px; font-weight:600; }
+.form-error { display:none; background:#fdeaea; border:1px solid #f0b9b9; color:#9c2b2b;
+  padding:14px 18px; border-radius:12px; margin-bottom:18px; font-weight:600; }
 
 /* ---------- Contact info ---------- */
 .info-list { display:flex; flex-direction:column; gap:22px; }
